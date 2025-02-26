@@ -3,10 +3,9 @@ import SimpleLightbox from 'simplelightbox';
 import 'izitoast/dist/css/iziToast.min.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-
-export function renderImageGallery(images) {
-const gallery = document.querySelector('.gallery');
-  gallery.innerHTML = '';
+export function renderImageGallery(images, append = false) {
+  const gallery = document.querySelector('.gallery');
+  if (!append) gallery.innerHTML = '';
 
   images.forEach(image => {
     const imgCard = `
@@ -24,12 +23,10 @@ const gallery = document.querySelector('.gallery');
     `;
     gallery.insertAdjacentHTML('beforeend', imgCard);
   });
-  
 
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 }
-
 
 export function showError(message) {
   iziToast.error({
@@ -38,18 +35,23 @@ export function showError(message) {
   });
 }
 
-
 export function showLoadingIndicator() {
-  const loading = document.querySelector('.loading');
-  loading.classList.remove('hidden');
+  document.querySelector('.loading').classList.remove('hidden');
 }
-
 
 export function hideLoadingIndicator() {
-  const loading = document.querySelector('.loading');
-  loading.classList.add('hidden');
+  document.querySelector('.loading').classList.add('hidden');
 }
 
+export function clearGallery() {
+  document.querySelector('.gallery').innerHTML = '';
+}
+
+export function scrollPage() {
+  const gallery = document.querySelector('.gallery');
+  const cardHeight = gallery.firstElementChild?.getBoundingClientRect().height || 0;
+  window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
+}
 
 export function showNoResultsMessage() {
   iziToast.info({
@@ -57,3 +59,4 @@ export function showNoResultsMessage() {
     message: 'Sorry, there are no images matching your search query. Please try again!',
   });
 }
+
